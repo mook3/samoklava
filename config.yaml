@@ -308,6 +308,7 @@ pcbs:
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
+<<<<<<< HEAD
       encoder:
         what: rotary
         params:
@@ -316,6 +317,29 @@ pcbs:
           A: ENC1_A
           B: ENC1_B
           C: GND
+=======
+      mcu_r:
+        what: promicro_flippable
+        where:
+          ref:
+            - matrix_inner_top
+          shift: [20, -11]
+          rotate: 270
+        params:
+          orientation: up
+          silk_layer: B.SilkS
+          P4: row_top
+          P5: row_home
+          P6: row_bottom
+          P7: row_thumb
+          P14: col_inner
+          P15: col_index
+          P18: col_middle
+          P19: col_ring
+          P20: col_pinky
+      mcu_l:
+        what: promicro_flippable
+>>>>>>> e9b05ab (Put Promicro silk prints on the right sides)
         where:
           ref: encoder_col_row
           rotate: -90
@@ -327,6 +351,7 @@ pcbs:
           rotate: -90
         params:
           orientation: down
+<<<<<<< HEAD
           P20: VCC # Left side indicator
           P21: ROW0
           P19: ROW1
@@ -342,6 +367,37 @@ pcbs:
           P5:  ENC1_A
           P4:  ENC1_B
           P0:  DATA
+=======
+          silk_layer: F.SilkS
+      pad_plus:
+        what: pad
+        where:
+          ref:
+            - matrix_inner_top
+          shift: [23, -6]
+          rotate: 0
+        params:
+          front: true
+          back: true
+          width: 1.5
+          height: 1.5
+          text: "B+"
+          net: Bplus
+      pad_minus:
+        what: pad
+        where:
+          ref:
+            - matrix_inner_top
+          shift: [23, -3]
+          rotate: 0
+        params:
+          front: true
+          back: true
+          width: 1.5
+          height: 1.5
+          text: "B-"
+          net: GND
+>>>>>>> e9b05ab (Put Promicro silk prints on the right sides)
       trrs:
         what: trrs
         where:
