@@ -30,6 +30,20 @@ units:
   tenting_puck_shift_y: -ky/2 - 5.6
   logo_shift_y: -16.25
 points:
+<<<<<<< HEAD
+=======
+  key:
+    footprints:
+      choc_hotswap:
+        type: choc
+        params:
+          hotswap: true
+          reverse: true
+          keycaps: true
+        nets:
+          from: =colrow
+          to: =column_net
+>>>>>>> b08aba1 (Initial modification to test push and github actions)
   zones:
     matrix:
       key.tags: switch
@@ -42,11 +56,23 @@ points:
           key.stagger: 9
           key.column_net: COL2
         middle:
+<<<<<<< HEAD
           key.stagger: 2.5
           key.column_net: COL3
         index:
           key.stagger: index_stagger
           key.column_net: COL4
+=======
+          key:
+            stagger: 0.3 ky
+            spread: kx
+            column_net: col_middle
+        index:
+          key:
+            stagger: -0.4 ky
+            spread: kx
+            column_net: col_index
+>>>>>>> b08aba1 (Initial modification to test push and github actions)
         inner:
           key.stagger: -3.5
           key.column_net: COL5
@@ -297,8 +323,12 @@ pcbs:
         params:
           from: "{{colrow}}"
           to: "{{column_net}}"
+<<<<<<< HEAD
           hotswap: true
           keycaps: true
+=======
+<<<<<<< HEAD
+>>>>>>> b08aba1 (Initial modification to test push and github actions)
       diode:
         what: diode
         where: [[-/^mirror_.*/, [switch, encoder]]]
@@ -320,6 +350,10 @@ pcbs:
 =======
       mcu_r:
         what: promicro_flippable
+=======
+      mcu_l:
+        what: promicro
+>>>>>>> 2033736 (Initial modification to test push and github actions)
         where:
           ref:
             - matrix_inner_top
@@ -408,7 +442,33 @@ pcbs:
           A: VCC
           B: DATA
           C: GND
+<<<<<<< HEAD
           D: ''
+=======
+          D: P0
+      jumper_l:
+        what: jumper
+        where:
+          ref:
+            - matrix_inner_bottom
+          shift: [23.5, 0]
+          rotate: 270
+        params:
+          side: B
+          from: Bplus
+          to: RAW
+      jumper_r:
+        what: jumper
+        where:
+          ref:
+            - matrix_inner_bottom
+          shift: [23.5, 0]
+          rotate: 270
+        params:
+          side: F
+          from: Bplus
+          to: RAW
+>>>>>>> b08aba1 (Initial modification to test push and github actions)
       reset:
         what: reset_button
         where:
@@ -567,6 +627,7 @@ pcbs:
           ref: mirror_matrix_inner_num
           shift: [mcu_shift_x, mcu_shift_y]
         params:
+<<<<<<< HEAD
           text: "Right\\nUp"
       text_version:
         what: version
@@ -714,3 +775,10 @@ pcbs:
       main:
         outline: board_outline_left
     footprints: *bottom_footprints
+=======
+          layer: B.SilkS
+          text: "samoklava v0.3\\nby soundmonster"
+          justify: right mirror
+
+
+>>>>>>> b08aba1 (Initial modification to test push and github actions)
