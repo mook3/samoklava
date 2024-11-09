@@ -1,43 +1,48 @@
 module.exports = {
-    params: {
-        designator: 'B', // for Button
-        from: undefined,
-        to: undefined
-    },
-    body: p => {
-            // this footprint goes to both sides by default so it ignores the layer setting
-            return `
-            (module kbd:ResetSW (layer F.Cu) (tedit 5B9559E6) (tstamp 61905781)
+  params: {
+    designator: 'B',
+    class: "B",
+    side: "F",
+    from: { type: 'net', value: 'RST' },
+    to: { type: 'net', value: 'GND' },
+  },
+  body: (p) => {
+    return `
+        (module SW_SKHLLCA010 (layer ${p.side}.Cu) (tedit 61FC55F2)
 
-                (descr "Two pin through hole Tactile Switch, the same as on the Corne")
-                (tags "Tactile Switch")
+            (descr "alps SKHLLCA010 DIP pushbutton")
+            (tags "alps tht dip pushbutton SPST")
+            (attr through_hole)
 
-                ${p.at /* parametric position */}
-                ${'' /* footprint reference */}
-                (fp_text reference "${p.ref}" (at 0 2.55) (layer F.SilkS) ${p.ref_hide} (effects (font (size 1 1) (thickness 0.15))))
-                (fp_text value "" (at 0 -2.55) (layer F.Fab) (effects (font (size 1 1) (thickness 0.15))))
+            ${p.at /* parametric position */}
+            ${"" /* footprint reference */}
 
-                ${'' /* outline */}
-                (fp_text user RESET (at 0 0 ${p.rot}) (layer F.SilkS) (effects (font (size 1 1) (thickness 0.15))))
-                (fp_text user RESET (at 0.127 0 ${p.rot}) (layer B.SilkS) (effects (font (size 1 1) (thickness 0.15)) (justify mirror)))
+            (fp_text reference "${p.ref}" (at -2.25 3.5) (layer "${p.side}.SilkS") ${p.ref_hide
+      } (effects (font (size 1 1) (thickness 0.15))))
 
-                (fp_line (start 3 1.5) (end 3 1.75) (layer B.SilkS) (width 0.15))
-                (fp_line (start 3 1.75) (end -3 1.75) (layer B.SilkS) (width 0.15))
-                (fp_line (start -3 1.75) (end -3 1.5) (layer B.SilkS) (width 0.15))
-                (fp_line (start -3 -1.5) (end -3 -1.75) (layer B.SilkS) (width 0.15))
-                (fp_line (start -3 -1.75) (end 3 -1.75) (layer B.SilkS) (width 0.15))
-                (fp_line (start 3 -1.75) (end 3 -1.5) (layer B.SilkS) (width 0.15))
-                (fp_line (start -3 1.75) (end 3 1.75) (layer F.SilkS) (width 0.15))
-                (fp_line (start 3 1.75) (end 3 1.5) (layer F.SilkS) (width 0.15))
-                (fp_line (start -3 1.75) (end -3 1.5) (layer F.SilkS) (width 0.15))
-                (fp_line (start -3 -1.75) (end -3 -1.5) (layer F.SilkS) (width 0.15))
-                (fp_line (start -3 -1.75) (end 3 -1.75) (layer F.SilkS) (width 0.15))
-                (fp_line (start 3 -1.75) (end 3 -1.5) (layer F.SilkS) (width 0.15))
+            (fp_text value "" (at 0 -0.75) (layer ${p.side}.Fab) (effects (font (size 1 1) (thickness 0.15))))
 
-                ${'' /* pins */}
-                (pad 2 thru_hole circle (at -3.25 0 ${p.rot}) (size 2 2) (drill 1.3) (layers *.Cu *.Mask F.SilkS) ${p.from.str})
-                (pad 1 thru_hole circle (at 3.25 0 ${p.rot}) (size 2 2) (drill 1.3) (layers *.Cu *.Mask F.SilkS) ${p.to.str})
-            )
-            `
-    }
-}
+            (fp_line (start -2.25 0.55) (end 2.25 0.55) (layer "${p.side}.SilkS") (width 0.12))
+            (fp_line (start -3.9 -0.07) (end -3.9 -3.75) (layer "${p.side}.SilkS") (width 0.12))
+            (fp_line (start -1.25 -3.75) (end -1.25 -5) (layer "${p.side}.SilkS") (width 0.12))
+            (fp_line (start 3.9 -0.07) (end 3.9 -3.75) (layer "${p.side}.SilkS") (width 0.12))
+            (fp_line (start -3.9 -3.75) (end 3.9 -3.75) (layer "${p.side}.SilkS") (width 0.12))
+            (fp_line (start 1.25 -3.75) (end 1.25 -5) (layer "${p.side}.SilkS") (width 0.12))
+            (fp_line (start -1.25 -5) (end 1.25 -5) (layer "${p.side}.SilkS") (width 0.12))
+            (fp_line (start -3.65 -4.97) (end 3.65 -4.97) (layer "${p.side}.CrtYd") (width 0.05))
+            (fp_line (start 3.65 -4.97) (end 3.65 2.18) (layer "${p.side}.CrtYd") (width 0.05))
+            (fp_line (start -3.65 -4.97) (end -3.65 2.18) (layer "${p.side}.CrtYd") (width 0.05))
+            (fp_line (start -3.65 2.18) (end 3.65 2.18) (layer "${p.side}.CrtYd") (width 0.05))
+            (pad "1" thru_hole circle (at 2.5 -1.25 ${p.rot
+      }) (size 1.8 1.8) (drill 1) (layers *.Cu "*.Mask") ${p.to.str})
+            (pad "2" thru_hole circle (at -2.5 -1.25 ${p.rot
+      }) (size 1.8 1.8) (drill 1) (layers *.Cu "*.Mask") ${p.from.str
+      })
+            (pad "MP" thru_hole circle (at -3.5 1.25 ${p.rot
+      }) (size 2.1 2.1) (drill 1.3) (layers *.Cu *.Mask))
+            (pad "MP" thru_hole circle (at 3.5 1.25 ${p.rot
+      }) (size 2.1 2.1) (drill 1.3) (layers *.Cu *.Mask))
+        )
+        `;
+  },
+};

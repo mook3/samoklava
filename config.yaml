@@ -1,369 +1,660 @@
 meta:
-  engine: 4.0.4
-  name: samoklava
-  version: 0.3
-  author: soundmonster
-  url: https://github.com/soundmonster/samoklava
+  engine: 4.1.0
+  version: 0.0.1
+  author: Henri Nurmi
 units:
-  kx: cx
-  ky: cy
-  px: 2
-  py: 2
+  kx: u
+  ky: u
+  px: kx + 2
+  py: ky + 2
+  mirror_distance: 10U
+  index_stagger: -2.5
+  arch_top_x: 0
+  arch_top_y: -132.5
+  arch_bottom_x: -70
+  arch_bottom_y: -323
+  arch_left_x: 230.5
+  arch_left_y: 16
+  arch_right_x: -224
+  arch_right_y: 20
+  mcu_shift_x: kx + 2
+  mcu_shift_y: -13.5
+  conn_cut_width: 18
+  conn_cut_shift_y: 9.6
+  mounting_spacer_diameter: 3.1
+  mounting_hole_diameter: 2.2
+  trrs_shift_x: kx + 17
+  trrs_shift_y: mcu_shift_y - 22.5
+  reset_shift_x: kx + 13.6
+  reset_shfit_y: trrs_shift_y - 6.5
+  tenting_puck_shift_y: -ky/2 - 5.6
+  logo_shift_y: -16.25
 points:
-  key:
-    footprints:
-      choc_hotswap:
-        type: choc
-        params:
-          hotswap: true
-          reverse: true
-          keycaps: true
-        nets:
-          from: =colrow
-          to: =column_net
   zones:
     matrix:
-      key.padding: ky
+      key.tags: switch
       columns:
+        outer:
+          key.column_net: COL0
         pinky:
-          key:
-            stagger: 0 ky
-            spread: kx
-            column_net: col_pinky
+          key.column_net: COL1
         ring:
-          key:
-            stagger: 0.7 ky
-            spread: kx
-            column_net: col_ring
+          key.stagger: 9
+          key.column_net: COL2
         middle:
-          key:
-            stagger: 0.3 ky
-            spread: kx
-            column_net: col_middle
+          key.stagger: 2.5
+          key.column_net: COL3
         index:
-          key:
-            stagger: -0.4 ky
-            spread: kx
-            column_net: col_index
+          key.stagger: index_stagger
+          key.column_net: COL4
         inner:
-          key:
-            stagger: -0.1 ky
-            spread: kx
-            column_net: col_inner
+          key.stagger: -3.5
+          key.column_net: COL5
       rows:
         bottom:
-          row_net: row_bottom
+          row_net: ROW3
         home:
-          row_net: row_home
+          row_net: ROW2
         top:
-          row_net: row_top
-    thumbfan:
+          row_net: ROW1
+        num:
+          row_net: ROW0
+      # Fix placement on KiCAD sheet.
+      anchor:
+        shift: [50, -100]
+    thumbs:
+      key.tags: switch
+      anchor:
+        ref: matrix_middle_bottom
+        shift: [0, -ky]
+      columns:
+        mod1:
+          key.column_net: COL1
+        mod2:
+          key.stagger: index_stagger
+          key.column_net: COL2
+        layer:
+          key:
+            shift: [1.1, -5]
+            rotate: -10
+          key.column_net: COL3
+        space:
+          key:
+            width: 1.5kx
+            rotate: 67
+            shift: [1, -14]
+          key.column_net: COL4
+      rows:
+        cluster:
+          row_net: ROW4
+    encoder:
+      key.tags: encoder
       anchor:
         ref: matrix_inner_bottom
-        shift: [-0.5 kx, -1 ky]
+        shift: [1.22kx, 0]
       columns:
-        near:
-          key:
-            spread: kx
-            splay: -15
-            origin: [-0.5 kx, -0.5 ky]
-            column_net: col_middle
-        home:
-          key:
-            spread: kx
-            splay: -15
-            origin: [-0.5 kx, -0.5 ky]
-            column_net: col_index
-        far:
-          key:
-            spread: kx
-            splay: -15
-            origin: [-0.5 kx, -0.5 ky]
-            column_net: col_inner
+        col:
+          key.column_net: COL5
       rows:
-        thumb:
-          row_net: row_thumb
+        row:
+          row_net: ROW4
+    mounting_left:
+      key:
+        tags: mount
+        padding: 2ky
+      anchor:
+        ref: matrix_outer_bottom
+        shift: [kx/2, ky/2]
+      columns:
+        c1:
+      rows:
+        r1:
+        r2:
+    mounting_right:
+      key:
+        tags: mount
+        padding: 3ky + 1
+      anchor:
+        ref: matrix_inner_bottom
+        shift: [-kx/2 + 1, -ky/2 - 1]
+      columns:
+        c1:
+      rows:
+        r1:
+        r2:
+    mounting_thumb:
+      key:
+        tags: mount
+      anchor:
+        ref: thumbs_space_cluster
+        shift: [kx/2 + 2, ky/2 - 2]
+      columns:
+        c1:
+      rows:
+        r1:
+  mirror:
+    ref: matrix_middle_bottom
+    distance: mirror_distance
 outlines:
-  # board dimensions according to JLCPCB: 122.28 mm x 101.05 mm
-  raw:
+  _keys_normal:
     - what: rectangle
-      where: true
-      asym: source
-      size: [kx + px, ky + py]
-      corner: px
-  thumbfan_glue:
-    - what: polygon
-      points:
-        - ref: matrix_inner_bottom
-          shift: [0.5 kx + 0.5px, -0.5 ky + 0.5 py]
-        - ref: thumbfan_far_thumb
-          shift: [0.5 kx - 0.5px, 0.5 ky + 0.5 py]
-        - ref: thumbfan_far_thumb
-          shift: [0.5 kx - 0.5px, -0.5 ky - 0.5 py]
-        - ref: thumbfan_near_thumb
-          shift: [-0.5 kx + 0.5 px, -0.5 ky - 0.5 py]
-        - ref: matrix_pinky_bottom
-          shift: [0.5 kx - 0.5 py, -0.5 ky - 0.5 py]
-        - ref: matrix_pinky_home
-        - ref: matrix_inner_home
-  patch_outer:
-    - what: polygon
-      points:
-        - ref: matrix_ring_top
-        - ref: matrix_ring_bottom
-        - ref: matrix_pinky_bottom
-          shift: [-0.5 (kx + px), 0]
-        - ref: matrix_pinky_top
-          shift: [-0.5 (kx + px), 0]
-  patch_inner:
-    - what: polygon
-      points:
-        - ref: matrix_inner_top
-          shift: [0.5 (kx + px), 0]
-        - ref: matrix_inner_bottom
-          shift: [0.5 (kx + px), 0]
-        - ref: matrix_index_bottom
-        - ref: matrix_index_top
-  controller_area:
+      where: [switch, encoder]
+      size: [kx-1, ky-1]
+  _keys_space:
     - what: rectangle
       where:
-        - ref: matrix_inner_top
-          # re-tranalte to new anchor position
-          shift: [32/2 + 0 kx, 76.5/2 - 4.05 ky]
-      size: [32, 76.5]
-      corner: px
-  switches:
+        ref: thumbs_space_cluster
+      size: [1.5kx-1, ky-1]
+  keys:
+    - name: _keys_normal
+    - operation: stack
+      name: _keys_space
+  # Outline arches for left side
+  _top_arch_circle_left:
+    - what: circle
+      radius: 200
+      where:
+        ref: matrix_middle_bottom
+        shift: [arch_top_x, arch_top_y]
+  _bottom_arch_circle_left:
+    - what: circle
+      radius: 300
+      where:
+        ref: matrix_middle_bottom
+        shift: [arch_bottom_x, arch_bottom_y]
+  _left_arch_circle_left:
+    - what: circle
+      radius: 300
+      where:
+        ref: matrix_middle_bottom
+        shift: [arch_left_x, arch_left_y]
+  _right_arch_circle_left:
+    - what: circle
+      radius: 300
+      where:
+        ref: matrix_middle_bottom
+        shift: [arch_right_x, arch_right_y]
+  _conn_cut_left:
     - what: rectangle
-      where: true
+      size: [conn_cut_width, 10]
+      where:
+        ref: matrix_inner_num
+        shift: [kx + 2, conn_cut_shift_y]
+  _arches_left:
+    [
+      +_top_arch_circle_left,
+      -_bottom_arch_circle_left,
+      ~_left_arch_circle_left,
+      ~_right_arch_circle_left,
+    ]
+  # Outline arches for right side
+  _top_arch_circle_right:
+    - what: circle
+      radius: 200
+      where:
+        ref: matrix_middle_bottom
+        shift: [mirror_distance - arch_top_x, arch_top_y]
+  _bottom_arch_circle_right:
+    - what: circle
+      radius: 300
+      where:
+        ref: matrix_middle_bottom
+        shift: [mirror_distance - arch_bottom_x, arch_bottom_y]
+  _left_arch_circle_right:
+    - what: circle
+      radius: 300
+      where:
+        ref: matrix_middle_bottom
+        shift: [mirror_distance - arch_left_x, arch_left_y]
+  _right_arch_circle_right:
+    - what: circle
+      radius: 300
+      where:
+        ref: matrix_middle_bottom
+        shift: [mirror_distance - arch_right_x, arch_right_y]
+  _conn_cut_right:
+    - what: rectangle
+      size: [conn_cut_width, 10]
+      where:
+        ref: mirror_matrix_inner_num
+        shift: [kx + 2, conn_cut_shift_y]
+  _arches_right:
+    [
+      +_top_arch_circle_right,
+      -_bottom_arch_circle_right,
+      ~_left_arch_circle_right,
+      ~_right_arch_circle_right,
+    ]
+  # Mounting holes
+  _mounting_holes:
+    - what: circle
+      radius: mounting_hole_diameter/2
+      where: mount
+  # Tenting Puck
+  _tenting_puck:
+    - what: circle
+      radius: 41.5/2
+      where:
+        ref: matrix_middle_home
+        shift: [kx/2, tenting_puck_shift_y]
+  # Board outlines
+  board_outline_left:
+    - what: outline
+      name: _arches_left
+      fillet: 3
+  board_outline_right:
+    - what: outline
+      name: _arches_right
+      fillet: 3
+  board_left:
+    [ board_outline_left, -_mounting_holes]
+  board_right:
+    [ board_outline_right, -_mounting_holes]
+  board_pcb_left:
+    [ board_outline_left, -_conn_cut_left]
+  board_pcb_right:
+    [ board_outline_right, -_conn_cut_right]
+  board_tenting_puck_left:
+    [ board_outline_left, -_tenting_puck]
+  # Switch plate
+  _switch_cutouts:
+    - what: rectangle
+      where: [switch, encoder]
       asym: source
       size: 14
-  keycaps:
-    - what: rectangle 
-      where: true
-      asym: source
-      size: [kx, ky] 
-      corner: 1
-  keywell:
-    - "raw"
-    - "+patch_inner"
-    - "+patch_outer"
-    - "+thumbfan_glue"
-  base_outline:
-    - "keywell"
-    - "+controller_area"
-  screw_holes:
-    top_left:
-      what: circle
+      bound: false
+  _mcu_cutout:
+    - what: rectangle
+      size: [30, 60]
       where:
-        - ref: matrix_ring_home
-          shift: [-0.5 kx, 0 ky]
-      radius: 1.05
-    bottom_left:
-      what: circle
-      where:
-        - ref: matrix_pinky_bottom
-          shift: [0.5 kx, 0]
-      radius: 1.05
-    top_right:
-      what: circle
-      where:
-        - ref: matrix_inner_top
-          shift: [-0.5 kx, 0]
-      radius: 1.05
-    palm:
-      what: circle
-      where:
-        - ref: matrix_index_bottom
-          shift: [0, -1.06 ky]
-      radius: 1.05
-    thumb:
-      what: circle
-      where:
-        - ref: thumbfan_far_thumb
-          shift: [-0.55 kx, 0]
-      radius: 1.05
-  mounting_holes:
-    $extends: outlines.screw_holes
-    top_left:
-      radius: 2.05
-    bottom_left:
-      radius: 2.05
-    top_right:
-      radius: 2.05
-    palm:
-      radius: 2.05
-    thumb:
-      radius: 2.05
-  bottom_outline:
-    - "base_outline"
-    # TODO use footprints with pad + via reinforcement as mounting holes
-    - "-screw_holes"
-  plate:
-    - "keywell"
-    - "-switches"
-    - "-screw_holes"
-  pcb:
-    - "base_outline"
-    # TODO use footprints with pad + via reinforcement as mounting holes
-    - "-mounting_holes"
+        ref: matrix_inner_home
+        shift: [0.5kx + 30/2 + 0.5, -0.5ky + 60/2 + 0.5]
+  switch_plate:
+    [board_outline_left, -_switch_cutouts, -_mcu_cutout]
+  switch_plate_with_mouting:
+    [switch_plate, -_mounting_holes]
+  # Debug outlines
+  _debug:
+    - name: board_left
+    - operation: stack
+      name: keys
+  debug:
+    - name: _mounting_holes
+    - operation: stack
+      name: _debug
 pcbs:
-  top_plate:
+  left:
+    template: kicad8
     outlines:
-      edge:
-        outline: plate
-        layer: Edge.Cuts
+      main:
+        outline: board_pcb_left
     footprints:
-      jlc_order_number:
-        what: text
-        where:
-          ref:
-            - matrix_ring_home
-          shift: [-0.25 kx, 0.5 ky]
+      switch:
+        what: mx
+        where: [[-/^mirror_.*/, switch]]
+        adjust:
+          rotate: 180
         params:
-          text: "JLCJLCJLCJLC"
-          justify: left
-  bottom_plate:
-    outlines:
-      edge:
-        outline: bottom_outline
-        layer: Edge.Cuts
-  board:
-    outlines:
-      edge:
-        outline: pcb
-        layer: Edge.Cuts
-    footprints:
-      choc_hotswap:
-        what: choc
-        where:
-          - /matrix_.*/
-          - /thumbfan_.*/
-        params:
-          hotswap: true
-          reverse: true
-          keycaps: true
           from: "{{colrow}}"
           to: "{{column_net}}"
-      mcu_l:
-        what: promicro
-        where:
-          ref:
-            - matrix_inner_top
-          shift: [20, -11]
-          rotate: 270
+          hotswap: true
+          keycaps: true
+      diode:
+        what: diode
+        where: [[-/^mirror_.*/, [switch, encoder]]]
+        asym: source
+        adjust:
+          shift: [ 0, 4.5 ]
         params:
-          orientation: up
-          P4: row_top
-          P5: row_home
-          P6: row_bottom
-          P7: row_thumb
-          P14: col_inner
-          P15: col_index
-          P18: col_middle
-          P19: col_ring
-          P20: col_pinky
-      mcu_r:
-        what: promicro
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+      encoder:
+        what: rotary
+        params:
+          from: col_row
+          to: COL5
+          A: ENC1_A
+          B: ENC1_B
+          C: GND
         where:
-          ref:
-            - matrix_inner_top
-          shift: [22.5, -12.25]
-          rotate: 270
+          ref: encoder_col_row
+          rotate: -90
+      promicro:
+        what: promicro_custom
+        where:
+          ref: matrix_inner_num
+          shift: [mcu_shift_x, mcu_shift_y]
+          rotate: -90
         params:
           orientation: down
-      pad_plus:
-        what: pad
-        where:
-          ref:
-            - matrix_inner_top
-          shift: [23, -6]
-          rotate: 0
-        params:
-          front: true
-          back: true
-          width: 1.5
-          height: 1.5
-          text: "B+"
-          net: Bplus
-      pad_minus:
-        what: pad
-        where:
-          ref:
-            - matrix_inner_top
-          shift: [23, -3]
-          rotate: 0
-        params:
-          front: true
-          back: true
-          width: 1.5
-          height: 1.5
-          text: "B-"
-          net: GND
+          P20: VCC # Left side indicator
+          P21: ROW0
+          P19: ROW1
+          P6:  ROW2
+          P7:  ROW3
+          P8:  ROW4
+          P9:  COL0
+          P18: COL1
+          P15: COL2
+          P14: COL3
+          P16: COL4
+          P10: COL5
+          P5:  ENC1_A
+          P4:  ENC1_B
+          P0:  DATA
       trrs:
-        what: trrs_tight
+        what: trrs
         where:
-          ref:
-            - matrix_inner_bottom
-          shift: [32, -15]
-          rotate: 270
+          ref: matrix_inner_num
+          shift: [trrs_shift_x, trrs_shift_y]
+          rotate: -90
         params:
-          reverse: true
-          symmetric: false
-          # The naming of the nets on this footprint is different from the Corne schematics.
-          A: ""
-          B: VCC
+          A: VCC
+          B: DATA
           C: GND
-          D: P0
-      jumper_l:
-        what: jumper
-        where:
-          ref:
-            - matrix_inner_bottom
-          shift: [23.5, 0]
-          rotate: 270
-        params:
-          side: B
-          from: Bplus
-          to: RAW
-      jumper_r:
-        what: jumper
-        where:
-          ref:
-            - matrix_inner_bottom
-          shift: [23.5, 0]
-          rotate: 270
-        params:
-          side: F
-          from: Bplus
-          to: RAW
+          D: ''
       reset:
         what: reset_button
         where:
-          ref:
-            - matrix_inner_bottom
-          shift: [17, 0]
-          rotate: 270
+          ref: matrix_inner_num
+          shift: [reset_shift_x, reset_shfit_y]
+          rotate: -90
+      zone_front:
+        what: zone
+        where:
+          ref: matrix_outer_num
+          shift: [-1kx, 1.2ky]
         params:
-          from: GND
-          to: RST
-      info_l:
+          net: VCC
+          side: F
+          width: 8.5kx
+          height: 6.5ky
+      zone_back:
+        what: zone
+        where:
+          ref: matrix_outer_num
+          shift: [-1kx, 1.2ky]
+        params:
+          net: GND
+          side: B
+          width: 8.5kx
+          height: 6.5ky
+      mounting:
+        what: mounting_hole_plated
+        where: [[-/^mirror_.*/, mount]]
+        params.drill: mounting_spacer_diameter
+      text_left:
         what: text
         where:
-          ref:
-            - matrix_pinky_bottom
-          shift: [0.75 kx, 0]
+          ref: matrix_inner_num
+          shift: [mcu_shift_x, mcu_shift_y]
         params:
-          text: "samoklava v0.3\\nby soundmonster"
-          justify: left
-      info_r:
+          text: "Left\\nUp"
+      text_version:
+        what: version
+        where:
+          ref: matrix_inner_num
+          shift: [mcu_shift_x, mcu_shift_y + 16.5]
+      tenting_puck:
+        what: tenting_puck
+        where:
+          ref: matrix_middle_home
+          shift: [kx/2, tenting_puck_shift_y]
+      logo:
+        what: logo
+        where:
+          ref: matrix_ring_bottom
+          shift: [0, logo_shift_y]
+  right:
+    template: kicad8
+    outlines:
+      main:
+        outline: board_pcb_right
+    footprints:
+      switch:
+        what: mx
+        where: [[/^mirror_.*/, switch]]
+        adjust:
+          rotate: 180
+        params:
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+          hotswap: true
+          keycaps: true
+      diode:
+        what: diode
+        where: [[/^mirror_.*/, [switch, encoder]]]
+        asym: source
+        adjust:
+          shift: [ 0, 4.5 ]
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+      encoder:
+        what: rotary
+        params:
+          from: COL5
+          to: mirror_col_row
+          A: ENC1_A
+          B: ENC1_B
+          C: GND
+        where:
+          ref: mirror_encoder_col_row
+          rotate: 90
+      promicro:
+        what: promicro_custom
+        where:
+          ref: mirror_matrix_inner_num
+          shift: [mcu_shift_x, mcu_shift_y]
+          rotate: 90
+        params:
+          orientation: down
+          P20: GND # Right side indicator
+          P3:  ROW0
+          P4:  ROW1
+          P14: ROW2
+          P16: ROW3
+          P10: ROW4
+          P2:  COL0
+          P5:  COL1
+          P6:  COL2
+          P7:  COL3
+          P8:  COL4
+          P9:  COL5
+          P18: ENC1_A
+          P19: ENC1_B
+          P0:  DATA
+      trrs:
+        what: trrs
+        where:
+          ref: mirror_matrix_inner_num
+          shift: [trrs_shift_x, trrs_shift_y + 4.6]
+          rotate: -90
+        params:
+          A: VCC
+          B: DATA
+          C: GND
+          D: ''
+      reset:
+        what: reset_button
+        where:
+          ref: mirror_matrix_inner_num
+          shift: [reset_shift_x, reset_shfit_y]
+          rotate: -90
+      zone_front:
+        what: zone
+        where:
+          ref: mirror_matrix_outer_num
+          shift: [-1kx, 1.2ky]
+        params:
+          net: VCC
+          side: F
+          width: -8.5kx
+          height: 6.5ky
+      zone_back:
+        what: zone
+        where:
+          ref: mirror_matrix_outer_num
+          shift: [-1kx, 1.2ky]
+        params:
+          net: GND
+          side: B
+          width: -8.5kx
+          height: 6.5ky
+      mounting:
+        what: mounting_hole_plated
+        where: [[/^mirror_.*/, mount]]
+        params.drill: mounting_spacer_diameter
+      text_right:
         what: text
         where:
-          ref:
-            - matrix_pinky_bottom
-          shift: [0.75 kx, 0]
+          ref: mirror_matrix_inner_num
+          shift: [mcu_shift_x, mcu_shift_y]
         params:
-          layer: B.SilkS
-          text: "samoklava v0.3\\nby soundmonster"
-          justify: right mirror
-
-
+          text: "Right\\nUp"
+      text_version:
+        what: version
+        where:
+          ref: mirror_matrix_inner_num
+          shift: [mcu_shift_x, mcu_shift_y + 16.5]
+      tenting_puck:
+        what: tenting_puck
+        where:
+          ref: mirror_matrix_middle_home
+          shift: [kx/2, tenting_puck_shift_y]
+      logo:
+        what: logo
+        where:
+          ref: mirror_matrix_ring_bottom
+          shift: [0, logo_shift_y]
+  switch_plate:
+    template: kicad8
+    outlines:
+      main:
+        outline: switch_plate
+    footprints:
+      mounting:
+        what: mounting_hole_npth
+        where: [[-/^mirror_.*/, mount]]
+        params.hole_size: mounting_hole_diameter
+        params.hole_drill: mounting_hole_diameter
+      text_version_front:
+        what: version
+        where:
+          ref: matrix_outer_top
+          shift: [kx/2, -ky/2]
+          rotate: 90
+        params:
+          layer: Cu
+          side: F
+      text_version_back:
+        what: version
+        where:
+          ref: matrix_outer_top
+          shift: [kx/2, -ky/2]
+          rotate: 90
+        params:
+          layer: Cu
+          side: B
+          mirrored: true
+      zone_front:
+        what: zone
+        where:
+          ref: matrix_outer_num
+          shift: [-1kx, 1.2ky]
+        params:
+          net: ''
+          side: F
+          width: 8.5kx
+          height: 6.5ky
+      zone_back:
+        what: zone
+        where:
+          ref: matrix_outer_num
+          shift: [-1kx, 1.2ky]
+        params:
+          net: ''
+          side: B
+          width: 8.5kx
+          height: 6.5ky
+  bottom_board_with_art:
+    template: kicad8
+    outlines:
+      main:
+        outline: board_outline_left
+    footprints:
+      mounting:
+        what: mounting_hole_npth
+        where: [[-/^mirror_.*/, mount]]
+        params.hole_size: mounting_hole_diameter
+        params.hole_drill: mounting_hole_diameter
+      art:
+        what: artwork
+  bottom_board_with_tenting_puck:
+    template: kicad8
+    outlines:
+      main:
+        outline: board_tenting_puck_left
+    footprints: &bottom_footprints
+      mounting:
+        what: mounting_hole_npth
+        where: [[-/^mirror_.*/, mount]]
+        params.hole_size: mounting_hole_diameter
+        params.hole_drill: mounting_hole_diameter
+      logo_front:
+        what: logo
+        where:
+          ref: matrix_middle_num
+          shift: [kx/2, -ky/2]
+      logo_back:
+        what: logo
+        where:
+          ref: matrix_middle_num
+          shift: [kx/2, -ky/2]
+        params:
+          mirrored: true
+      text_version_front:
+        what: version
+        where:
+          ref: matrix_outer_top
+          shift: [kx/2, -ky/2]
+          rotate: 90
+        params:
+          layer: Cu
+          side: F
+      text_version_back:
+        what: version
+        where:
+          ref: matrix_outer_top
+          shift: [kx/2, -ky/2]
+          rotate: 90
+        params:
+          layer: Cu
+          side: B
+          mirrored: true
+      zone_front:
+        what: zone
+        where:
+          ref: matrix_outer_num
+          shift: [-1kx, 1.2ky]
+        params:
+          net: ''
+          side: F
+          width: 8.5kx
+          height: 6.5ky
+      zone_back:
+        what: zone
+        where:
+          ref: matrix_outer_num
+          shift: [-1kx, 1.2ky]
+        params:
+          net: ''
+          side: B
+          width: 8.5kx
+          height: 6.5ky
+  bottom_board_empty:
+    template: kicad8
+    outlines:
+      main:
+        outline: board_outline_left
+    footprints: *bottom_footprints
