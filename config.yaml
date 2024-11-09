@@ -1,5 +1,5 @@
 meta:
-  engine: 4.0.4
+  engine: 4.1.0
   version: 0.0.1
   author: Henri Nurmi
 units:
@@ -30,20 +30,6 @@ units:
   tenting_puck_shift_y: -ky/2 - 5.6
   logo_shift_y: -16.25
 points:
-<<<<<<< HEAD
-=======
-  key:
-    footprints:
-      choc_hotswap:
-        type: choc
-        params:
-          hotswap: true
-          reverse: true
-          keycaps: true
-        nets:
-          from: =colrow
-          to: =column_net
->>>>>>> b08aba1 (Initial modification to test push and github actions)
   zones:
     matrix:
       key.tags: switch
@@ -56,23 +42,11 @@ points:
           key.stagger: 9
           key.column_net: COL2
         middle:
-<<<<<<< HEAD
           key.stagger: 2.5
           key.column_net: COL3
         index:
           key.stagger: index_stagger
           key.column_net: COL4
-=======
-          key:
-            stagger: 0.3 ky
-            spread: kx
-            column_net: col_middle
-        index:
-          key:
-            stagger: -0.4 ky
-            spread: kx
-            column_net: col_index
->>>>>>> b08aba1 (Initial modification to test push and github actions)
         inner:
           key.stagger: -3.5
           key.column_net: COL5
@@ -323,12 +297,8 @@ pcbs:
         params:
           from: "{{colrow}}"
           to: "{{column_net}}"
-<<<<<<< HEAD
           hotswap: true
           keycaps: true
-=======
-<<<<<<< HEAD
->>>>>>> b08aba1 (Initial modification to test push and github actions)
       diode:
         what: diode
         where: [[-/^mirror_.*/, [switch, encoder]]]
@@ -338,7 +308,6 @@ pcbs:
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
-<<<<<<< HEAD
       encoder:
         what: rotary
         params:
@@ -347,33 +316,6 @@ pcbs:
           A: ENC1_A
           B: ENC1_B
           C: GND
-=======
-      mcu_r:
-        what: promicro_flippable
-=======
-      mcu_l:
-        what: promicro
->>>>>>> 2033736 (Initial modification to test push and github actions)
-        where:
-          ref:
-            - matrix_inner_top
-          shift: [20, -11]
-          rotate: 270
-        params:
-          orientation: up
-          silk_layer: B.SilkS
-          P4: row_top
-          P5: row_home
-          P6: row_bottom
-          P7: row_thumb
-          P14: col_inner
-          P15: col_index
-          P18: col_middle
-          P19: col_ring
-          P20: col_pinky
-      mcu_l:
-        what: promicro_flippable
->>>>>>> e9b05ab (Put Promicro silk prints on the right sides)
         where:
           ref: encoder_col_row
           rotate: -90
@@ -385,7 +327,6 @@ pcbs:
           rotate: -90
         params:
           orientation: down
-<<<<<<< HEAD
           P20: VCC # Left side indicator
           P21: ROW0
           P19: ROW1
@@ -401,37 +342,6 @@ pcbs:
           P5:  ENC1_A
           P4:  ENC1_B
           P0:  DATA
-=======
-          silk_layer: F.SilkS
-      pad_plus:
-        what: pad
-        where:
-          ref:
-            - matrix_inner_top
-          shift: [23, -6]
-          rotate: 0
-        params:
-          front: true
-          back: true
-          width: 1.5
-          height: 1.5
-          text: "B+"
-          net: Bplus
-      pad_minus:
-        what: pad
-        where:
-          ref:
-            - matrix_inner_top
-          shift: [23, -3]
-          rotate: 0
-        params:
-          front: true
-          back: true
-          width: 1.5
-          height: 1.5
-          text: "B-"
-          net: GND
->>>>>>> e9b05ab (Put Promicro silk prints on the right sides)
       trrs:
         what: trrs
         where:
@@ -442,33 +352,7 @@ pcbs:
           A: VCC
           B: DATA
           C: GND
-<<<<<<< HEAD
           D: ''
-=======
-          D: P0
-      jumper_l:
-        what: jumper
-        where:
-          ref:
-            - matrix_inner_bottom
-          shift: [23.5, 0]
-          rotate: 270
-        params:
-          side: B
-          from: Bplus
-          to: RAW
-      jumper_r:
-        what: jumper
-        where:
-          ref:
-            - matrix_inner_bottom
-          shift: [23.5, 0]
-          rotate: 270
-        params:
-          side: F
-          from: Bplus
-          to: RAW
->>>>>>> b08aba1 (Initial modification to test push and github actions)
       reset:
         what: reset_button
         where:
@@ -627,7 +511,6 @@ pcbs:
           ref: mirror_matrix_inner_num
           shift: [mcu_shift_x, mcu_shift_y]
         params:
-<<<<<<< HEAD
           text: "Right\\nUp"
       text_version:
         what: version
@@ -775,10 +658,3 @@ pcbs:
       main:
         outline: board_outline_left
     footprints: *bottom_footprints
-=======
-          layer: B.SilkS
-          text: "samoklava v0.3\\nby soundmonster"
-          justify: right mirror
-
-
->>>>>>> b08aba1 (Initial modification to test push and github actions)
