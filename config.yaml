@@ -419,7 +419,7 @@ pcbs:
     template: kicad8
     outlines:
       main:
-        outline: board_outline_left
+        outline: _board_outline_left
     footprints: &bottom_footprints
       mounting:
         what: mounting_hole_npth
