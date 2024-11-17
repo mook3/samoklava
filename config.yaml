@@ -1,7 +1,7 @@
 meta:
   engine: 4.1.0
   version: 0.0.1
-  author: mook
+  author: Henri Nurmi
 units:
   $default_width: cx-1
   $default_height: cy-1
@@ -341,14 +341,14 @@ pcbs:
       promicro:
         what: promicro_custom
         where:
-          ref: mcu_anchor.c.r
+          ref: mcu_pt.c.r
           rotate: -90
         params:
           orientation: down
       trrs:
         what: trrs
         where:
-          ref: reset_ttrs_anchor_trrs_r
+          ref: reset_ttrs_pt_trrs_r
           rotate: -90
         params:
           A: VCC
@@ -358,7 +358,7 @@ pcbs:
       reset:
         what: reset_button
         where:
-          ref: reset_ttrs_anchor_reset_r
+          ref: reset_ttrs_pt_reset_r
           rotate: -90
       zone_front:
         what: zone
