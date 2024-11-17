@@ -322,7 +322,7 @@ outlines:
     - operation: stack
       name: _debug4
 pcbs:
-  left:
+  board:
     template: kicad8
     outlines:
       main:
@@ -384,7 +384,7 @@ pcbs:
         what: mounting_hole_plated
         where: [[-/^mirror_.*/, mount]]
         params.drill: mounting_spacer_diameter
-  switch_plate:
+  top_plate:
     template: kicad8
     outlines:
       main:
@@ -415,7 +415,7 @@ pcbs:
           side: B
           width: 8.5kx
           height: 6.5ky
-  bottom_board_empty:
+  bottom_plate:
     template: kicad8
     outlines:
       main:
