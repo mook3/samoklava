@@ -1,409 +1,449 @@
 meta:
-  engine: 4.0.4
-  name: samoklava
-  version: 0.3
-  author: soundmonster
-  url: https://github.com/soundmonster/samoklava
+  engine: 4.1.0
+  version: 0.0.1
+  author: mook
 units:
+  $default_width: cx-1
+  $default_height: cy-1
+  $default_spread: cx
+  $default_padding: cy
   kx: cx
   ky: cy
-  px: 2
-  py: 2
+  px: kx + 2
+  py: ky + 2
+  index_stagger: -8.7
+  arch_top_shift: 52
+  arch_top_radius: 70
+  arch_bottom_shift: 297
+  arch_bottom_radius: 300
+  arch_left_x: 290
+  arch_left_y: 0
+  arch_left_radius: 302
+  arch_right_x: -200
+  arch_right_y: 20
+  arch_right_radius: 300
+  mcu_shift_x: kx + 2
+  mcu_shift_y: -13.5
+  conn_cut_w: 50
+  conn_cut_h: 50
+  mounting_spacer_diameter: 3.1
+  mounting_hole_diameter: 2.2
+  reset_w: 3
+  reset_h: 6
+  trrs_w: 13
+  trrs_h: 6
+  mcu_w: 18
+  mcu_h: 33
+  trrs_shift_x: kx + 17
+  trrs_shift_y: mcu_shift_y - 22.5
+  reset_shift_x: kx + 13.6
+  reset_shfit_y: trrs_shift_y - 6.5
+  tenting_puck_shift_y: -ky/2 - 5.6
+  logo_shift_y: -16.25
 points:
-  key:
-    footprints:
-      choc_hotswap:
-        type: choc
-        params:
-          hotswap: true
-          reverse: true
-          keycaps: true
-        nets:
-          from: =colrow
-          to: =column_net
-      diode:
-        type: diode
-        nets:
-          from: =colrow
-          to: =row_net
-        anchor:
-          shift: [0, -5]
   zones:
     matrix:
-      key.padding: ky
+      key.tags: switch
       columns:
         pinky:
-          key:
-            stagger: 0 ky
-            spread: kx
-            column_net: col_pinky
+          rows:
+            bottom:
+              key_net: P6 
+            home:
+              key_net: P5
+            top:
+              key_net: P4
         ring:
-          key:
-            stagger: 0.7 ky
-            spread: kx
-            column_net: col_ring
+          key.stagger: 13
+          rows:
+            bottom:
+              key_net: P3
+            home:
+              key_net: P2
+            top:
+              key_net: P0
         middle:
-          key:
-            stagger: 0.2 ky
-            spread: kx
-            column_net: col_middle
+          key.stagger: 6.7
+          rows:
+            bottom:
+              key_net: P1
+            home:
+              key_net: P18
+            top:
+              key_net: P15
         index:
-          key:
-            stagger: -0.2 ky
-            spread: kx
-            column_net: col_index
+          key.stagger: index_stagger
+          rows:
+            bottom:
+              key_net: P14
+            home:
+              key_net: P16
+            top:
+              key_net: P10
+        inner:
+          key.stagger: -3.5
+          rows:
+            bottom:
+              key_net: P19
+            home:
+              key_net: P20
+            top:
+              key_net: P21
+      # Fix placement on KiCAD sheet.
+      anchor:
+        shift: [50, -100]
+    thumbs:
+      key.tags: switch
+      anchor:
+        ref:
+          ref: matrix_inner_bottom
+          shift: [-kx/2, -ky/2]
+          rotate: -10
+        shift: [-2, -ky/2]
+      columns:
         inner:
           key:
-            stagger: -0.1 ky
-            spread: kx
-            column_net: col_inner
-      rows:
-        bottom:
-          row_net: row_bottom
+            key_net: P7
         home:
-          row_net: row_home
-        top:
-          row_net: row_top
-    thumbfan:
+          key:
+            # hinge at bottom-left corner of key
+            origin: [-kx/2, -ky/2]
+            splay: -8
+            key_net: P8
+        outer:
+          key:
+            # hinge at bottom-left corner of key
+            origin: [-kx/2, -ky/2]
+            splay: -8
+            key_net: P9
+      rows:
+        cluster:
+    thumb_pt:
+      key:
+        width: 2
+        height: 2
       anchor:
         ref: matrix_inner_bottom
-        shift: [-0.5 kx, -1 ky]
+        shift: [kx/2, -ky/2 - 4]
       columns:
-        near:
-          key:
-            spread: kx
-            splay: -15
-            origin: [-0.5 kx, -0.5 ky]
-            column_net: col_middle
-        home:
-          key:
-            spread: kx
-            splay: -15
-            origin: [-0.5 kx, -0.5 ky]
-            column_net: col_index
-        far:
-          key:
-            spread: kx
-            splay: -15
-            origin: [-0.5 kx, -0.5 ky]
-            column_net: col_inner
+        c:
       rows:
-        thumb:
-          row_net: row_thumb
+        r:
+    reset_ttrs_pt:
+      key:
+        width: 2
+        height: 2
+        spread: reset_w/2 + trrs_w/2 + 1
+      anchor:
+        ref:  thumb_pt_c_r
+        shift: [reset_w/2, trrs_h/2]
+      columns:
+        reset:
+        trrs:
+      rows:
+        r:
+    mcu_pt:
+      key:
+        width: 2
+        height: 2
+      anchor:
+        ref: reset_ttrs_pt_reset_r
+        shift: [-reset_w/2 + mcu_w / 2, trrs_h / 2 + mcu_h/2 + 1]
+      columns: 
+        c:
+      rows:
+        r:
+    mounting_left:
+      key:
+        width: 2
+        height: 2
+        tags: mount
+        padding: 2ky
+      anchor:
+        ref: matrix_pinky_bottom
+        shift: [kx/2, ky/2]
+      columns:
+        c1:
+      rows:
+        r1:
+        r2:
+    mounting_right:
+      key:
+        width: 2
+        height: 2
+        tags: mount
+        padding: 3ky
+      anchor:
+        ref: matrix_inner_bottom
+        shift: [-kx/2, -ky/2]
+      columns:
+        c1:
+      rows:
+        r1:
+        r2:
+    mounting_thumb:
+      key:
+        width: 2
+        height: 2
+        tags: mount
+      anchor:
+        ref: thumbs_outer_cluster
+        shift: [kx/2 - 2, ky/2 + 2]
+      columns:
+        c1:
+      rows:
+        r1:
 outlines:
-  # board dimensions according to JLCPCB: 122.28 mm x 101.05 mm
-  raw:
+  keys:
     - what: rectangle
-      where: true
-      asym: source
-      size: [kx + px, ky + py]
-      corner: px
-  thumbfan_glue:
-    - what: polygon
-      points:
-        - ref: matrix_inner_bottom
-          shift: [0.5 kx + 0.5px, -0.5 ky + 0.5 py]
-        - ref: thumbfan_far_thumb
-          shift: [0.5 kx - 0.5px, 0.5 ky + 0.5 py]
-        - ref: thumbfan_far_thumb
-          shift: [0.5 kx - 0.5px, -0.5 ky - 0.5 py]
-        - ref: thumbfan_near_thumb
-          shift: [-0.5 kx + 0.5 px, -0.5 ky - 0.5 py]
-        - ref: matrix_pinky_bottom
-          shift: [0.5 kx - 0.5 py, -0.5 ky - 0.5 py]
-        - ref: matrix_pinky_home
-        - ref: matrix_inner_home
-  patch_outer:
-    - what: polygon
-      points:
-        - ref: matrix_ring_top
-        - ref: matrix_ring_bottom
-        - ref: matrix_pinky_bottom
-          shift: [-0.5 (kx + px), 0]
-        - ref: matrix_pinky_top
-          shift: [-0.5 (kx + px), 0]
-  patch_inner:
-    - what: polygon
-      points:
-        - ref: matrix_inner_top
-          shift: [0.5 (kx + px), 0]
-        - ref: matrix_inner_bottom
-          shift: [0.5 (kx + px), 0]
-        - ref: matrix_index_bottom
-        - ref: matrix_index_top
-  controller_area:
-    - what: rectangle
+      where: [switch]
+      size: [kx-1, ky-1]
+  _top_arch_circle_left:
+    - what: circle
+      radius: arch_top_radius
       where:
-        - ref: matrix_inner_top
-          # re-tranalte to new anchor position
-          shift: [32/2 + 0 kx, 76.5/2 - 4.05 ky]
-      size: [32, 76.5]
-      corner: px
-  switches:
+        ref:
+          aggregate.parts:
+            - ref: matrix_pinky_top
+              orient: 0
+              shift: [-kx/2, ky/2]
+            - ref: matrix_inner_top
+              orient: 0
+              shift: [kx/2, ky/2]
+          orient:
+            ref: matrix_pinky_top
+            shift: [-kx/2, ky/2]
+        orient: 90
+        shift: [0, arch_top_shift]
+  _bottom_arch_circle_left:
+    - what: circle
+      radius: arch_bottom_radius
+      where:
+        ref:
+          aggregate.parts:
+            - ref: matrix_pinky_bottom
+              shift: [-kx/2, -ky/2]
+            - ref: thumbs_outer_cluster
+              shift: [kx/2, -ky/2]
+          orient:
+            ref: matrix_pinky_bottom
+            shift: [-kx/2, -ky/2]
+        orient: 90
+        shift: [0, arch_bottom_shift]
+  _left_arch_circle_left:
+    - what: circle
+      radius: arch_left_radius
+      where:
+        ref: matrix_pinky_home
+        shift: [arch_left_x, arch_left_y]
+  _right_arch_circle_left:
+    - what: circle
+      radius: arch_right_radius
+      where:
+        ref: matrix_middle_bottom
+        shift: [arch_right_x, arch_right_y]
+  _arches_left:
+    [
+      +_top_arch_circle_left,
+      -_bottom_arch_circle_left,
+      ~_left_arch_circle_left,
+      ~_right_arch_circle_left,
+    ]
+  # MCU
+  _mcu:
     - what: rectangle
-      where: true
+      size: [mcu_w, mcu_h]
+      where: mcu_pt_c_r
+  # TODO Needs to reference _mcu
+  _conn_cut_left:
+    - what: rectangle
+      size: [conn_cut_w, conn_cut_h]
+      where:
+        ref: mcu_pt_c_r
+        shift: [-mcu_w/2 + conn_cut_w/2, mcu_h/2 + conn_cut_h/2]
+  _reset:
+    - what: rectangle
+      size: [reset_w, reset_h]
+      where: reset_ttrs_pt_reset_r
+  _trrs:
+    - what: rectangle
+      size: [trrs_w, trrs_h]
+      where: reset_ttrs_pt_trrs_r
+  # Mounting holes
+  _mounting_holes:
+    - what: circle
+      radius: mounting_hole_diameter/2
+      where: mount
+  # Board outlines
+  _board_outline_left:
+    - what: outline
+      name: _arches_left
+      fillet: 3
+  board_left:
+    [ _board_outline_left, _mcu, -_mounting_holes]
+  board_pcb_left:
+    [ _board_outline_left, -_conn_cut_left]
+  # Switch plate
+  _mcu_cutout:
+    - what: rectangle
+      size: [30, 60]
+      where:
+        ref: matrix_inner_bottom
+        shift: [0.5kx + 30/2 + 0.5, -0.5ky + 60/2 + 0.5]
+  _switch_cutouts:
+    - what: rectangle
+      where: [switch]
       asym: source
       size: 14
-  keycaps:
-    - what: rectangle 
-      where: true
-      asym: source
-      size: [kx, ky] 
-      corner: 1
-  keywell:
-    - "raw"
-    - "+patch_inner"
-    - "+patch_outer"
-    - "+thumbfan_glue"
-  base_outline:
-    - "keywell"
-    - "+controller_area"
-  screw_holes:
-    top_left:
-      what: circle
-      where:
-        - ref: matrix_ring_home
-          shift: [-0.5 kx, 0 ky]
-      radius: 1.05
-    bottom_left:
-      what: circle
-      where:
-        - ref: matrix_pinky_bottom
-          shift: [0.5 kx, 0]
-      radius: 1.05
-    top_right:
-      what: circle
-      where:
-        - ref: matrix_inner_top
-          shift: [-0.5 kx, 0]
-      radius: 1.05
-    palm:
-      what: circle
-      where:
-        - ref: matrix_index_bottom
-          shift: [0, -1.06 ky]
-      radius: 1.05
-    thumb:
-      what: circle
-      where:
-        - ref: thumbfan_far_thumb
-          shift: [-0.55 kx, 0]
-      radius: 1.05
-  mounting_holes:
-    $extends: outlines.screw_holes
-    top_left:
-      radius: 2.05
-    bottom_left:
-      radius: 2.05
-    top_right:
-      radius: 2.05
-    palm:
-      radius: 2.05
-    thumb:
-      radius: 2.05
-  bottom_outline:
-    - "base_outline"
-    # TODO use footprints with pad + via reinforcement as mounting holes
-    - "-screw_holes"
-  plate:
-    - "keywell"
-    - "-switches"
-    - "-screw_holes"
-  pcb:
-    - "base_outline"
-    # TODO use footprints with pad + via reinforcement as mounting holes
-    - "-mounting_holes"
+      bound: false
+  switch_plate:
+    [_board_outline_left, -_switch_cutouts, -_mcu_cutout]
+  switch_plate_with_mounting:
+    [switch_plate, -_mounting_holes]
+  # Debug outlines
+  _debug:
+    - name: board_pcb_left
+    - operation: stack
+      name: keys
+  _debug2:
+    - name: _trrs
+    - operation: stack
+      name: _debug
+  _debug3:
+    - name: _mcu
+    - operation: stack
+      name: _debug2
+  _debug4:
+    - name: _reset
+    - operation: stack
+      name: _debug3
+  debug:
+    - name: _mounting_holes
+    - operation: stack
+      name: _debug4
 pcbs:
-  top_plate:
+  left:
+    template: kicad8
     outlines:
-      edge:
-        outline: plate
-        layer: Edge.Cuts
+      main:
+        outline: board_pcb_left
     footprints:
-      jlc_order_number:
-        what: text
-        where:
-          ref:
-            - matrix_ring_home
-          shift: [-0.25 kx, 0.5 ky]
-        params:
-          text: "JLCJLCJLCJLC"
-          justify: left
-  bottom_plate:
-    outlines:
-      edge:
-        outline: bottom_outline
-        layer: Edge.Cuts
-  board:
-    outlines:
-      edge:
-        outline: pcb
-        layer: Edge.Cuts
-    footprints:
-      choc_hotswap:
+      switch:
         what: choc
-        where:
-          - /matrix_.*/
-          - /thumbfan_.*/
+        where: [[-/^mirror_.*/, switch]]
+        adjust:
+          rotate: 180
         params:
+          from: "{{key_net}}"
+          to: GND
           hotswap: true
-          reverse: true
           keycaps: true
-          from: "{{colrow}}"
-          to: "{{column_net}}"
-      diode:
-        what: diode
+      promicro:
+        what: promicro_custom
         where:
-          - /matrix_.*/
-          - /thumbfan_.*/
-        adjust.shift: [0, -5]
-        params:
-          from: "{{colrow}}"
-          to: "{{row_net}}"
-      mcu_r:
-        what: promicro_flippable
-        where:
-          ref:
-            - matrix_inner_top
-          shift: [20, -11]
-          rotate: 270
-        params:
-          orientation: up
-          silk_layer: B.SilkS
-          P4: row_top
-          P5: row_home
-          P6: row_bottom
-          P7: row_thumb
-          P14: col_inner
-          P15: col_index
-          P18: col_middle
-          P19: col_ring
-          P20: col_pinky
-      mcu_l:
-        what: promicro_flippable
-        where:
-          ref:
-            - matrix_inner_top
-          shift: [22.5, -12.25]
-          rotate: 270
+          ref: mcu_anchor.c.r
+          rotate: -90
         params:
           orientation: down
-          silk_layer: F.SilkS
-      pad_plus:
-        what: pad
-        where:
-          ref:
-            - matrix_inner_top
-          shift: [23, -6]
-          rotate: 0
-        params:
-          front: true
-          back: true
-          width: 1.5
-          height: 1.5
-          text: "B+"
-          net: Bplus
-      pad_minus:
-        what: pad
-        where:
-          ref:
-            - matrix_inner_top
-          shift: [23, -3]
-          rotate: 0
-        params:
-          front: true
-          back: true
-          width: 1.5
-          height: 1.5
-          text: "B-"
-          net: GND
       trrs:
-        what: trrs_tight
+        what: trrs
         where:
-          ref:
-            - matrix_inner_bottom
-          shift: [32, -15]
-          rotate: 270
+          ref: reset_ttrs_anchor_trrs_r
+          rotate: -90
         params:
-          reverse: true
-          symmetric: false
-          # The naming of the nets on this footprint is different from the Corne schematics.
-          A: ""
-          B: VCC
+          A: VCC
+          B: DATA
           C: GND
-          D: P0
-      jumper_l:
-        what: jumper
-        where:
-          ref:
-            - matrix_inner_bottom
-          shift: [23.5, 0]
-          rotate: 270
-        params:
-          side: B
-          from: Bplus
-          to: RAW
-      jumper_r:
-        what: jumper
-        where:
-          ref:
-            - matrix_inner_bottom
-          shift: [23.5, 0]
-          rotate: 270
-        params:
-          side: F
-          from: Bplus
-          to: RAW
-      slider_l:
-        what: slider_threeway
-        where:
-          ref:
-            - matrix_inner_bottom
-          shift: [30, 0]
-          rotate: 270
-        params:
-          side: F
-          from: RAW
-          left: Bplus
-          right: ''
-      slider_r:
-        what: slider_threeway
-        where:
-          ref:
-            - matrix_inner_bottom
-          shift: [30, 0]
-          rotate: 270
-        params:
-          side: B
-          from: RAW
-          left: ''
-          right: Bplus
+          D: ''
       reset:
         what: reset_button
         where:
-          ref:
-            - matrix_inner_bottom
-          shift: [17, 0]
-          rotate: 270
-        params:
-          from: GND
-          to: RST
-      info_l:
-        what: text
+          ref: reset_ttrs_anchor_reset_r
+          rotate: -90
+      zone_front:
+        what: zone
         where:
-          ref:
-            - matrix_pinky_bottom
-          shift: [0.75 kx, 0]
+          ref: matrix_pinky_top
+          shift: [-1kx, 1.2ky]
         params:
-          text: "samoklava v0.3\\nby soundmonster"
-          justify: left
-      info_r:
-        what: text
+          net: VCC
+          side: F
+          width: 8.5kx
+          height: 6.5ky
+      zone_back:
+        what: zone
         where:
-          ref:
-            - matrix_pinky_bottom
-          shift: [0.75 kx, 0]
+          ref: matrix_pinky_top
+          shift: [-1kx, 1.2ky]
         params:
-          layer: B.SilkS
-          text: "samoklava v0.3\\nby soundmonster"
-          justify: right mirror
+          net: GND
+          side: B
+          width: 8.5kx
+          height: 6.5ky
+      mounting:
+        what: mounting_hole_plated
+        where: [[-/^mirror_.*/, mount]]
+        params.drill: mounting_spacer_diameter
+  switch_plate:
+    template: kicad8
+    outlines:
+      main:
+        outline: switch_plate
+    footprints:
+      mounting:
+        what: mounting_hole_npth
+        where: [[-/^mirror_.*/, mount]]
+        params.hole_size: mounting_hole_diameter
+        params.hole_drill: mounting_hole_diameter
+      zone_front:
+        what: zone
+        where:
+          ref: matrix_pinky_top
+          shift: [-1kx, 1.2ky]
+        params:
+          net: ''
+          side: F
+          width: 8.5kx
+          height: 6.5ky
+      zone_back:
+        what: zone
+        where:
+          ref: matrix_pinky_top
+          shift: [-1kx, 1.2ky]
+        params:
+          net: ''
+          side: B
+          width: 8.5kx
+          height: 6.5ky
+  bottom_board_empty:
+    template: kicad8
+    outlines:
+      main:
+        outline: board_outline_left
+    footprints: &bottom_footprints
+      mounting:
+        what: mounting_hole_npth
+        where: [[-/^mirror_.*/, mount]]
+        params.hole_size: mounting_hole_diameter
+        params.hole_drill: mounting_hole_diameter
+      zone_front:
+        what: zone
+        where:
+          ref: matrix_pinky_top
+          shift: [-1kx, 1.2ky]
+        params:
+          net: ''
+          side: F
+          width: 8.5kx
+          height: 6.5ky
+      zone_back:
+        what: zone
+        where:
+          ref: matrix_pinky_top
+          shift: [-1kx, 1.2ky]
+        params:
+          net: ''
+          side: B
+          width: 8.5kx
+          height: 6.5ky
+
