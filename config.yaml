@@ -341,7 +341,7 @@ pcbs:
       promicro:
         what: promicro_custom
         where:
-          ref: mcu_pt.c.r
+          ref: mcu_pt_c_r
           rotate: -90
         params:
           orientation: down
