@@ -12,9 +12,9 @@ units:
   px: kx + 2
   py: ky + 2
   index_stagger: -8.7
-  arch_top_shift: 52
+  arch_top_shift: 54
   arch_top_radius: 70
-  arch_bottom_shift: 297
+  arch_bottom_shift: 298.5
   arch_bottom_radius: 300
   arch_left_x: 290
   arch_left_y: 0
@@ -93,7 +93,7 @@ points:
       anchor:
         shift: [50, -100]
     thumbs:
-      key.tags: switch
+      key.tags: [switch, thumb]
       anchor:
         ref:
           ref: matrix_inner_bottom
@@ -188,7 +188,7 @@ points:
         tags: mount
       anchor:
         ref: thumbs_outer_cluster
-        shift: [kx/2 - 2, ky/2 + 2]
+        shift: [-kx/2 - 2, ky/2 + 2]
       columns:
         c1:
       rows:
@@ -198,6 +198,15 @@ outlines:
     - what: rectangle
       where: [switch]
       size: [kx-1, ky-1]
+  _thumbs:
+    - what: rectangle
+      where: [thumb]
+      size: [kx, ky]
+  # MCU
+  _mcu:
+    - what: rectangle
+      size: [mcu_w, mcu_h]
+      where: mcu_pt_c_r
   _top_arch_circle_left:
     - what: circle
       radius: arch_top_radius
@@ -223,19 +232,37 @@ outlines:
           aggregate.parts:
             - ref: matrix_pinky_bottom
               shift: [-kx/2, -ky/2]
-            - ref: thumbs_outer_cluster
-              shift: [kx/2, -ky/2]
+            - ref: thumbs_inner_cluster
+              shift: [-kx/2, -ky/2]
           orient:
             ref: matrix_pinky_bottom
             shift: [-kx/2, -ky/2]
         orient: 90
         shift: [0, arch_bottom_shift]
-  _left_arch_circle_left:
-    - what: circle
-      radius: arch_left_radius
+  _left_rect_to_subtract_left:
+    - what: rectangle
+      size: 10 * cx
       where:
         ref: matrix_pinky_home
-        shift: [arch_left_x, arch_left_y]
+        shift: [-kx/2 - sx/2, 0]
+  _right_rect_to_subtract_left:
+    - what: rectangle
+      size: 10 * cx
+      where:
+        ref: mcu_pt_c_r
+        shift: [mcu_w/2 + sx/2, 0]
+   #_thumb_poly_left:
+   # - what: poly
+   #   points:
+   #     - ref: thumbs_outer_cluster
+   #       orient: -26 # add first thumb orient and next 2's splays together
+   #       shift: [-kx/2, ky/2]
+   #     - ref: thumbs_outer_cluster
+   #       orient: -26 # add first thumb orient and next 2's splays together
+   #       shift: [kx/2, ky/2]
+   #   where:
+   #     ref: mcu_pt_c_r
+   #     shift: [mcu_w/2 + sx/2, 0]
   _right_arch_circle_left:
     - what: circle
       radius: arch_right_radius
@@ -246,14 +273,12 @@ outlines:
     [
       +_top_arch_circle_left,
       -_bottom_arch_circle_left,
-      ~_left_arch_circle_left,
-      ~_right_arch_circle_left,
+      -_left_rect_to_subtract_left,
+      +_mcu,
+      -_right_rect_to_subtract_left,
+      +_thumbs
+      #~_right_arch_circle_left,
     ]
-  # MCU
-  _mcu:
-    - what: rectangle
-      size: [mcu_w, mcu_h]
-      where: mcu_pt_c_r
   # TODO Needs to reference _mcu
   _conn_cut_left:
     - what: rectangle
@@ -280,9 +305,9 @@ outlines:
       name: _arches_left
       fillet: 3
   board_left:
-    [ _board_outline_left, _mcu, -_mounting_holes]
+    [ _board_outline_left,-_conn_cut_left, -_mounting_holes]
   board_pcb_left:
-    [ _board_outline_left, -_conn_cut_left]
+    [ _board_outline_left,-_conn_cut_left]
   # Switch plate
   _mcu_cutout:
     - what: rectangle
