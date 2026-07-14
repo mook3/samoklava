@@ -11,19 +11,10 @@ units:
   ky: cy
   px: kx + 2
   py: ky + 2
+  ring_stagger: 13
+  middle_stagger: 6.7
   index_stagger: -8.7
-  arch_top_shift: 54
-  arch_top_radius: 70
-  arch_bottom_shift: 298.5
-  arch_bottom_radius: 300
-  arch_left_x: 290
-  arch_left_y: 0
-  arch_left_radius: 302
-  arch_right_x: -200
-  arch_right_y: 20
-  arch_right_radius: 300
-  conn_cut_w: 50
-  conn_cut_h: 50
+  inner_stagger: -3.5
   mounting_spacer_diameter: 3.1
   mounting_hole_diameter: 2.2
   mounting_hole_case_inner_diameter: 3
@@ -60,7 +51,7 @@ points:
             top:
               key_net: P4
         ring:
-          key.stagger: 13
+          key.stagger: ring_stagger
           rows:
             bottom:
               key_net: P3
@@ -69,7 +60,7 @@ points:
             top:
               key_net: P0
         middle:
-          key.stagger: 6.7
+          key.stagger: middle_stagger
           rows:
             bottom:
               key_net: P1
@@ -87,7 +78,7 @@ points:
             top:
               key_net: P10
         inner:
-          key.stagger: -3.5
+          key.stagger: inner_stagger
           rows:
             bottom:
               key_net: P19
@@ -122,8 +113,7 @@ points:
             origin: [-kx/2, -ky/2]
             splay: -8
             key_net: P9
-      rows:
-        cluster:
+      rows: {cluster:}
 
     puck_left:
       key.tags: puck_hole
@@ -220,24 +210,6 @@ outlines:
     - what: rectangle
       size: [mcu_w, mcu_h]
       where: mcu_x_y
-  _conn_cut_left:
-    - what: rectangle
-      size: [conn_cut_w, conn_cut_h]
-      where:
-        ref: mcu_x_y
-        shift: [-mcu_w/2 + conn_cut_w/2, mcu_h/2 + conn_cut_h/2]
-  # todo misnamed, above is to cut space above mcu, this is to cut mcu
-  _conn_cut_left_poly:
-    - what: polygon
-      points:
-        - ref: mcu_x_y
-          shift: [-mcu_w/2, mcu_h/2 + 5]
-        - ref: reset_x_y
-          shift: [-reset_w/2, -reset_h/2]
-        - ref: trrs_x_y
-          shift: [trrs_w/2 + 5, -trrs_h/2]
-        - ref: mcu_x_y
-          shift: [mcu_w/2, mcu_h/2]
   _reset:
     - what: rectangle
       size: [reset_w, reset_h]
@@ -251,7 +223,7 @@ outlines:
     - what: circle
       radius: mounting_hole_diameter/2
       where: mount
-  _mounting_holes_case:
+  _case_mounting_holes:
     - what: circle
       radius: mounting_hole_case_outer_diameter/2
       where: mount
@@ -263,7 +235,7 @@ outlines:
     - what: circle
       radius: puck_hole_diam/2
       where: puck_hole
-  _puck_case_hole:
+  _case_puck_hole:
     - what: circle
       radius: puck_diam/2
       where: puck_center_x_y
@@ -306,16 +278,12 @@ outlines:
     - what: outline
       name: board_left_poly
       fillet: 2
-  board_left_poly_expanded:
+  _case_board_expanded:
     - what: outline
       name: board_left_poly
       expand: case_wall_thickness
-  board_left_only_expanded:
-    [board_left_poly_expanded, -board_left_poly]
-  board_left:
-    [ board_left_poly,-_conn_cut_left, -_mounting_holes, -_puck_holes]
-  board_pcb_left:
-    [ board_left_poly]#,-_conn_cut_left]
+  _case_board_only_expanded:
+    [_case_board_expanded, -board_left_poly]
   # Switch plate
   _switch_cutouts:
     - what: rectangle
@@ -323,13 +291,21 @@ outlines:
       asym: source
       size: 14
       bound: false
+  _plate_cut_left_poly:
+    - what: polygon
+      points:
+        - ref: mcu_x_y
+          shift: [-mcu_w/2, mcu_h/2 + 5]
+        - ref: reset_x_y
+          shift: [-reset_w/2, -reset_h/2]
+        - ref: trrs_x_y
+          shift: [trrs_w/2 + 5, -trrs_h/2]
+        - ref: mcu_x_y
+          shift: [mcu_w/2, mcu_h/2]
   switch_plate:
-    [board_left_poly, -_switch_cutouts, -_conn_cut_left_poly]
-  switch_plate_with_mounting:
-    [switch_plate, -_mounting_holes]
+    [board_left_poly, -_switch_cutouts, -_plate_cut_left_poly, -_mounting_holes]
   # Debug outlines
   _debug:
-   #- name: board_pcb_left
     - name: board_left_poly
     - operation: stack
       name: keys
@@ -358,7 +334,7 @@ pcbs:
     template: kicad8
     outlines:
       main:
-        outline: board_pcb_left
+        outline: board_left_poly
     footprints:
       switch:
         what: ceoloide/switch_choc_v1_v2 #choc
@@ -394,7 +370,7 @@ pcbs:
       trrs:
         what: ceoloide/trrs_pj320a
         where:
-          ref: trrs_x_y #reset_ttrs_pt_trrs_r
+          ref: trrs_x_y
           shift: [trrs_w/2, 0]
           rotate: -90
         #params:
@@ -405,11 +381,11 @@ pcbs:
       reset:
         what: ceoloide/reset_switch_tht_top
         where:
-          ref: reset_x_y #reset_ttrs_pt_reset_r
+          ref: reset_x_y 
           rotate: -90
       test_mount_point:
         what: mounting_hole_plated
-        where: reset_ttrs_pt_reset_r
+        where: reset_x_y
         params.drill: 1
       zone_front:
         what: zone
@@ -454,15 +430,15 @@ pcbs:
 cases:
     _bottom:
       - what: outline
-        name: board_left_poly_expanded
+        name: _case_board_expanded
         extrude: case_thickness
     _wall:
       - what: outline
-        name: board_left_only_expanded
+        name: _case_board_only_expanded
         extrude: case_wall_height
     _mounting_holes:
       - what: outline
-        name: _mounting_holes_case
+        name: _case_mounting_holes
         extrude: case_screw_standoff_height
     mycase:
       - what: case
@@ -472,7 +448,7 @@ cases:
       - what: case
         name: _mounting_holes
       - what: outline
-        name: _puck_case_hole
+        name: _case_puck_hole
         extrude: case_thickness
         operation: subtract
         
